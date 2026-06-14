@@ -11,6 +11,7 @@ Top-down plan editor for drawing wall segments — the same core idea as SketchI
 - Walls as **line segments** (start/end points)
 - **Live preview** while drawing — the segment under the cursor is shown before it is committed
 - **Plan-first workflow** — sketch the layout, then open the 3D view
+- Scrolling, pan and zoom drawing area
 
 ### 2. Walls 3D viewer
 
