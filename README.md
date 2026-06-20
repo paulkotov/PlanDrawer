@@ -1,6 +1,6 @@
 # Plan Drawer
 
-Browser app for drawing a **2D floor plan** and previewing the walls in **3D**. 
+Browser app for drawing a **2D walls plan** and previewing the walls in **3D**. 
 
 ## Two parts
 
