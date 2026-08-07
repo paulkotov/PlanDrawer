@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Демонстрация алгоритмов рендеринга</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="panels">
+      <div class="panel panel-editor">
+        <div>
+        <h2>Редактор карты (вид сверху)</h2>
+
+        <div class="canvas-container">
+          <canvas id="editor" width="400" height="400"></canvas>
+        </div>
+
+        <div class="controls">
+<!--          <button id="tool-wall" class="secondary" onclick="setTool('wall')" style="outline: 2px solid var(&#45;&#45;wc3-gold);">Стена</button>-->
+<!--          <button id="tool-guide" class="secondary" onclick="setTool('guide')">Серая линия</button>-->
+          <button id="demo-btn" class="secondary">Демо карта</button>
+          <button id="clear-btn" class="danger">Очистить</button>
+        </div>
+
+        <div class="info">Кликните и тяните для рисования. Стен: <span id="wall-count">0</span></div>
+
+      </div>
+        <hr class="editor-hr">
+        <div>
+        <h2>Настройки рендера</h2>
+
+        <div class="controls-editor">
+          <select id="algorithm">
+            <option value="painter">Алгоритм художника</option>
+            <option value="raycasting">Raycasting</option>
+            <option value="bsp">BSP Tree</option>
+          </select>
+          <button id="render-btn">Рендерить</button>
+        </div>
+
+        <div class="controls-editor controls-editor--spaced">
+          <label class="step-mode-label">
+            <input type="checkbox" id="step-mode-checkbox">
+            <span>Пошаговый режим</span>
+          </label>
+        </div>
+
+        <div class="controls-editor">
+          <button id="step-btn" disabled>Следующий шаг</button>
+          <button id="stop-btn" disabled>Остановить</button>
+        </div>
+
+        <div class="algorithm-info" id="algo-desc"></div>
+        <div class="stats" id="stats"></div>
+        <div class="order-display" id="order-display"></div>
+      </div>
+      </div>
+      
+      <div class="panel panel-render">
+        <h2>Рендер (вид от первого лица)</h2>
+        <div class="canvas-container">
+          <canvas id="render"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
