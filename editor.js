@@ -42,21 +42,12 @@ export class MapEditor {
   #changeListeners = new Set();
   #clearListeners = new Set();
 
-  #boundHandlers;
-
   constructor({ canvas, size = EDITOR_SIZE }) {
     if (!canvas) throw new Error('MapEditor: canvas is required');
 
     this.#canvas = canvas;
     this.#ctx = canvas.getContext('2d');
     this.#size = size;
-
-    this.#boundHandlers = {
-      start: this.#handleDrawStart.bind(this),
-      move: this.#handleDrawMove.bind(this),
-      end: this.#handleDrawEnd.bind(this),
-      cancel: this.#handleDrawCancel.bind(this),
-    };
 
     this.#attachListeners();
     this.draw();
@@ -204,48 +195,46 @@ export class MapEditor {
 
   #attachListeners() {
     const canvas = this.#canvas;
-    const { start, move, end, cancel } = this.#boundHandlers;
 
-    canvas.addEventListener('mousedown', start);
-    canvas.addEventListener('mousemove', move);
-    canvas.addEventListener('mouseup', end);
-    canvas.addEventListener('mouseleave', cancel);
+    canvas.addEventListener('mousedown', this.#handleDrawStart);
+    canvas.addEventListener('mousemove', this.#handleDrawMove);
+    canvas.addEventListener('mouseup', this.#handleDrawEnd);
+    canvas.addEventListener('mouseleave', this.#handleDrawCancel);
 
-    canvas.addEventListener('touchstart', start, { passive: false });
-    canvas.addEventListener('touchmove', move, { passive: false });
-    canvas.addEventListener('touchend', end, { passive: false });
-    canvas.addEventListener('touchcancel', cancel);
+    canvas.addEventListener('touchstart', this.#handleDrawStart, { passive: false });
+    canvas.addEventListener('touchmove', this.#handleDrawMove, { passive: false });
+    canvas.addEventListener('touchend', this.#handleDrawEnd, { passive: false });
+    canvas.addEventListener('touchcancel', this.#handleDrawCancel);
   }
 
   #detachListeners() {
     const canvas = this.#canvas;
-    const { start, move, end, cancel } = this.#boundHandlers;
 
-    canvas.removeEventListener('mousedown', start);
-    canvas.removeEventListener('mousemove', move);
-    canvas.removeEventListener('mouseup', end);
-    canvas.removeEventListener('mouseleave', cancel);
+    canvas.removeEventListener('mousedown', this.#handleDrawStart);
+    canvas.removeEventListener('mousemove', this.#handleDrawMove);
+    canvas.removeEventListener('mouseup', this.#handleDrawEnd);
+    canvas.removeEventListener('mouseleave', this.#handleDrawCancel);
 
-    canvas.removeEventListener('touchstart', start);
-    canvas.removeEventListener('touchmove', move);
-    canvas.removeEventListener('touchend', end);
-    canvas.removeEventListener('touchcancel', cancel);
+    canvas.removeEventListener('touchstart', this.#handleDrawStart);
+    canvas.removeEventListener('touchmove', this.#handleDrawMove);
+    canvas.removeEventListener('touchend', this.#handleDrawEnd);
+    canvas.removeEventListener('touchcancel', this.#handleDrawCancel);
   }
 
-  #handleDrawStart(event) {
+  #handleDrawStart = (event) => {
     event.preventDefault();
     this.#startPoint = getEventCoordinates(event, this.#canvas);
     this.#isDrawing = true;
-  }
+  };
 
-  #handleDrawMove(event) {
+  #handleDrawMove = (event) => {
     if (!this.#isDrawing) return;
     event.preventDefault();
     const coords = getEventCoordinates(event, this.#canvas);
     this.#drawPreview(coords);
-  }
+  };
 
-  #handleDrawEnd(event) {
+  #handleDrawEnd = (event) => {
     if (!this.#isDrawing) return;
     event.preventDefault();
 
@@ -272,14 +261,14 @@ export class MapEditor {
     this.#isDrawing = false;
     this.#startPoint = null;
     this.draw();
-  }
+  };
 
-  #handleDrawCancel() {
+  #handleDrawCancel = () => {
     if (!this.#isDrawing) return;
     this.#isDrawing = false;
     this.#startPoint = null;
     this.draw();
-  }
+  };
 
   #emitChange() {
     const scene = this.getScene();
