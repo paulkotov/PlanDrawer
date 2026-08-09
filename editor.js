@@ -1,8 +1,17 @@
-const EDITOR_SIZE = 400; const GRID_STEP = 40;
+const EDITOR_SIZE = 400;
+const GRID_STEP = 40;
 const FOV = Math.PI / 2;
 const VIEW_INDICATOR_LENGTH = 40;
 const FOV_INDICATOR_LENGTH = 80;
 const MIN_DRAG_DISTANCE = 10;
+
+const COLORS = {
+  WALL: 'rgba(128, 128, 128, 0.4)',
+  GUIDE: 'rgba(128, 128, 128, 0.5)',
+  PREVIEW: 'rgba(255, 255, 255, 0.5)',
+  PLAYER: '#00d4ff',
+  PLAYER_VIEW: 'rgba(0, 212, 255, 0.3)',
+};
 
 const DEMO_WALLS = Object.freeze([
   { x1: 50, y1: 50, x2: 300, y2: 50 },
@@ -118,7 +127,7 @@ export class MapEditor {
 
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(128, 128, 128, 0.4)';
+    ctx.strokeStyle = COLORS.GUIDE;
     for (const line of this.#guideLines) {
       ctx.beginPath();
       ctx.moveTo(line.x1, line.y1);
@@ -150,12 +159,12 @@ export class MapEditor {
     const ctx = this.#ctx;
     const { x, y, angle } = this.#player;
 
-    ctx.fillStyle = '#00d4ff';
+    ctx.fillStyle = COLORS.PLAYER;
     ctx.beginPath();
     ctx.arc(x, y, 8, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = '#00d4ff';
+    ctx.strokeStyle = COLORS.PLAYER;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -165,7 +174,7 @@ export class MapEditor {
     );
     ctx.stroke();
 
-    ctx.strokeStyle = 'rgba(0, 212, 255, 0.3)';
+    ctx.strokeStyle = COLORS.PLAYER_VIEW;
     ctx.lineWidth = 1;
     for (const a of [angle - FOV / 2, angle + FOV / 2]) {
       ctx.beginPath();
@@ -183,8 +192,8 @@ export class MapEditor {
     const ctx = this.#ctx;
     ctx.strokeStyle =
       this.#currentTool === 'guide'
-        ? 'rgba(128,128,128,0.5)'
-        : 'rgba(255,255,255,0.5)';
+        ? COLORS.GUIDE
+        : COLORS.PREVIEW;
     ctx.setLineDash([5, 5]);
     ctx.beginPath();
     ctx.moveTo(this.#startPoint.x, this.#startPoint.y);
@@ -264,7 +273,9 @@ export class MapEditor {
   };
 
   #handleDrawCancel = () => {
-    if (!this.#isDrawing) return;
+    if (!this.#isDrawing) {
+      return;
+    }
     this.#isDrawing = false;
     this.#startPoint = null;
     this.draw();
